@@ -1,0 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+body{
+  font-family: 'Ubuntu', sans-serif;
+}
+h1,h2,h3{font-weight: 700;;}
+.home-page{height:100vh}

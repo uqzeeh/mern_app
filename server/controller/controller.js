@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../modal/schema');
+const jwt = require('jsonwebtoken')
 
 //controller for register
 exports.register = async (req, res)=>{
@@ -42,7 +43,7 @@ exports.register = async (req, res)=>{
 }
 
 //controller for login
-exports.login = (req, res)=>{
+exports.login =async (req, res)=>{
     try {
         if(!req.body){
             res.status(406).json({err: "you have to fill the email and password field"})    
@@ -53,14 +54,37 @@ exports.login = (req, res)=>{
         if(!email || !password)
             return res.status(406).json({err:"not all fields have been entered"})
 
-        const user = "$2b$10$vru44/4o7rAGS2AAmio3ZuxdZuKrH6/WvY1rppFstApvcroR5foj."
-        //compare the password
-        const isMatch = bcrypt.compare(password, user);
+        const user =await User.findOne({email});
 
-        res.json({email,isMatch})
+        if(!user)
+            return res.status(406).json({err :"No Account with this email"})
+
+        
+        //compare the password
+        const isMatch = bcrypt.compare(password, user.password);
+
+        if(!isMatch)
+        return res.status(406).json({err:"invalid credentials"})
+
+        // create jwt token
+        const token = jwt.sign({id: user._id},process.env.JWT_SECRET)
+
+        res.json({token,username:user.username, email:user.email})
         
     } catch (error) {
         res.status(500).json({err:error.message || "Error while Login"})
     }
     
 }
+
+// Delete user controleer
+
+// exports.delete = async(req,res) =>{
+//     try {
+//         await User.findByIdAndDelete(req.user_id);
+//         res.json({msg:"user deleted successfully"})
+        
+//     } catch (error) {
+//         res.status(500).json({err:error.message || "error while deleting the user"})   
+//     }
+// }

@@ -1,42 +1,44 @@
+import React, {useState} from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import RegisterForm from './registerform';
 
 function Register() {
+
+	const [username, setUsername] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [passwordCheck, setPasswordCheck] = useState("");
+
+	// on form submit click handler
+	const handleSubmit = (event) =>{
+		event.preventDefault();
+		const newUser = {
+			username,
+			email,
+			password,
+			passwordCheck
+		} 
+		console.log(newUser);
+	}
+	let registerData = {
+		handleSubmit,
+		setUsername,
+		setEmail,
+		setPassword,
+		setPasswordCheck
+	}
+
 	return (
 		<div className="App pt-5">
+			<Container>
+				<Link to="/">Back to Home Page</Link>
+			</Container>
 			<Container>
 				<Row className="justify-content-center">
 					<Col md={6}>
 						<h1 className="mb-3 text-center">Create Account</h1>
-						<form method="POST">
-							<div className="mb-3 form-group">
-								<label className="d-block mb-2">User Name</label>
-								<div className="input-holder">
-									<input className="form-control" type="text" placeholder="john@example.com" />
-								</div>
-							</div>
-							<div className="mb-3 form-group">
-								<label className="d-block mb-2">Email</label>
-								<div className="input-holder">
-									<input className="form-control" type="email" placeholder="john@example.com" />
-								</div>
-							</div>
-							<div className="mb-3 form-group">
-								<label className="d-block mb-2">Password</label>
-								<div className="input-holder">
-									<input className="form-control" type="password" placeholder="john@example.com" />
-								</div>
-							</div>
-							<div className="mb-3 form-group">
-								<label className="d-block mb-2">Confirm Password</label>
-								<div className="input-holder">
-									<input className="form-control" type="password" placeholder="john@example.com" />
-								</div>
-							</div>
-							<div className="btn-holder">
-								<button type="submit" className="btn btn-primary">Create account</button>
-							</div>
-						</form>
+						<RegisterForm registerState = {registerData} />
 						<p>Already have account?<Link to="/login">Login</Link></p>
 					</Col>
 				</Row>
